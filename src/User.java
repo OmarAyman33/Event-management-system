@@ -1,5 +1,5 @@
 enum Gender {
-    MALE, FEMALE, OTHER
+    MALE, FEMALE
 }
 
 public abstract class User {
