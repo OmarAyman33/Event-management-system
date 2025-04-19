@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
- //maded by Ahmed Ashraf 16/4/2025
+ //made by Ahmed Ashraf 16/4/2025
  // don't forget to make thesse
 // ERROR HANDLING TO IMPLEMENT:
 // 1. Constructor: Validate name (non-empty), capacity (positive)
@@ -15,26 +15,22 @@ public class Room {
     private final String name;
     private final int capacity;
     private final String location;
-    private final List<LocalDate> bookedDates;
+    private ArrayList<Event> events;
 
    //excibation handling and constructors
-    public Room(String name, int capacity, String location) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Room name cannot be empty");
-        }
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("Capacity must be positive");
-        }
-        if (location == null || location.trim().isEmpty()) {
-            throw new IllegalArgumentException("Room location cannot be empty or null!");
-        }
+   public Room(String name, int capacity, String location) {
+       if (name == null || name.trim().isEmpty())
+           throw new IllegalArgumentException("Room name cannot be null or empty");
+       if (capacity <= 0)
+           throw new IllegalArgumentException("Capacity must be positive");
+       if (location == null || location.trim().isEmpty())
+           throw new IllegalArgumentException("Room location cannot be null or empty");
 
-
-        this.name = name.trim();
-        this.capacity = capacity;
-        this.location = location.trim();
-        this.bookedDates = new ArrayList<>();
-    }
+       this.name = name.trim();
+       this.capacity = capacity;
+       this.location = location.trim();
+       this.events = new ArrayList<>();
+   }
 
 
     // Core functionality
@@ -44,22 +40,23 @@ public class Room {
      */
 
     public boolean isAvailableOn(LocalDate date) {
-        if (date == null) {
+        if (date == null)
             throw new IllegalArgumentException("Date cannot be null");
+
+        for (int i = 0; i < events.size(); i++) {
+            if (date.equals(events.get(i).getDate())) {
+                return false;
+            }
         }
-        return !bookedDates.contains(date);
+        return true;
     }
 
-    /**
-     * Books the room for a specific date
-     * @throws IllegalStateException if room is already booked on that date
-     */
-    public void bookDate(LocalDate date) {
-        if (!isAvailableOn(date)) {
-            throw new IllegalStateException("Room already booked on " + date);
-        }
-        bookedDates.add(date);
+    public void bookEvent(Event event) {
+        LocalDate date = event.getDate();
+        if (isAvailableOn(date))
+            events.add(event);
     }
+
 
     // Getters (no setters - rooms are immutable after creation)
     public String getName() {
@@ -74,16 +71,17 @@ public class Room {
         return location;
     }
 
-    /**
-     * return Defensive copy of booked dates to prevent external modification
-     */
-    public List<LocalDate> getBookedDates() {
-        return new ArrayList<>(bookedDates);
+    public ArrayList<Event> getEvents() {
+        ArrayList<Event> copy = new ArrayList<>();
+        for (int i = 0; i < events.size(); i++) {
+            copy.add(events.get(i));
+        }
+        return copy;
     }
 
      @Override
      public String toString() {
-         return "Room[name=" + name + ", capacity=" + capacity + ", location=" + location + "]";
+         return "Room: name= " + name + ", capacity= " + capacity + ", location= " + location;
      }
     // Equality check (important for database operations)
     @Override

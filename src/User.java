@@ -26,7 +26,6 @@ public abstract class User {
     public String getDateOfBirth() {
         return dateOfBirth;
     }
-//
     // Setters
     public void setPassword(String password) {
         this.password = password;
